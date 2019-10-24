@@ -18,6 +18,13 @@ import {
 } from "./fetchGithubRepo";
 import {fromRelationalViews as referenceDetectorFromRelationalViews} from "./referenceDetector";
 
+/* sleep helper */
+function sleep(seconds){
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds*1000);
+  });
+}
+
 export interface Loader {
   declaration(): PluginDeclaration;
   updateMirror(
@@ -59,6 +66,8 @@ export async function updateMirror(
       cache,
     });
     reporter.finish(taskId);
+    /* to avoid hitting GH API rate limits */
+    await sleep(60);
   }
 }
 
